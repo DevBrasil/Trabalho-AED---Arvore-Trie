@@ -236,15 +236,16 @@ int printAutoSuggestions(TrieNode *root, const string query)
     }
 }
 
-void inserir_via_arquivo_txt()
+void inserir_via_arquivo_txt(TrieNode *root)
 {
-    struct TrieNode *root = getNode();
 
     FILE *file1;
     file1 = fopen("dados.txt", "r");
 
     char type;
     char palavra[200];
+    char *result;
+
     if (file1 == NULL)
     {
         printf("Problemas na LEITURA do arquivo\n");
@@ -254,14 +255,15 @@ void inserir_via_arquivo_txt()
         printf("ARQUIVO ABERTO COM SUCESSO LEITURA SENDO FEITA ...\n");
         while (!feof(file1))
         {
-            fscanf(file1, "%[^\n]", palavra);
-            cout << "Palavra no arquivo: " << palavra << endl;
-            //insert(root, palavra);
+            result = fgets(palavra, 100, file1); // o 'fgets' lê até 99 caracteres ou até o '\n'
+            cout << "Palavra no arquivo: " << result << endl;
+            insert(root, result);
         }
     }
     printf("LEITURA FEITA COM SUCESSO\n");
 
     fclose(file1);
+
 }
 
 void ClearTerminal()
@@ -276,6 +278,7 @@ void ClearTerminal()
 // Driver program to test above functions
 int main()
 {
+    
 
     int level = 0;
     char str[50];
@@ -295,10 +298,10 @@ int main()
     //printAutoSuggestions(root, "neuro");
 
     int opcao;
-
+ struct TrieNode *root = getNode();
     while (2 == 2)
     {
-        struct TrieNode *root = getNode();
+       
         printf("----------------------------------------------");
         printf("\n\tMENU\n");
         printf("1. Carregar arquivo de inicializacao:\n");
@@ -315,7 +318,7 @@ int main()
 
         case 1:
             ClearTerminal();
-            inserir_via_arquivo_txt();
+            inserir_via_arquivo_txt(root);
             printf("Opcao 1\n");
             break;
         case 2:
