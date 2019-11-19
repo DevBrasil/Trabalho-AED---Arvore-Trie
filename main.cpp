@@ -53,10 +53,12 @@ bool search(struct TrieNode *root, string key)
 void insert(struct TrieNode *root, const string key)
 {
     struct TrieNode *pCrawl = root;
+    int index;
 
     for (int level = 0; level < key.length(); level++)
     {
-        int index = CHAR_TO_INDEX(key[level]);
+        index = CHAR_TO_INDEX(key[level]);
+        cout << index << endl;
         if (!pCrawl->children[index])
             pCrawl->children[index] = getNode();
 
@@ -64,13 +66,16 @@ void insert(struct TrieNode *root, const string key)
     }
 
     // mark last node as leaf
+
     pCrawl->isLeaf = true;
 }
+
 // function to check if current node is leaf node or not
 bool isLeafNode(struct TrieNode *root)
 {
     return root->isLeaf != false;
 }
+
 // Returns 0 if current node has a child
 // If all children are NULL, return 1.
 bool isLastNode(struct TrieNode *root)
@@ -80,6 +85,7 @@ bool isLastNode(struct TrieNode *root)
             return 0;
     return 1;
 }
+
 // Returns true if root has no children, else false
 bool isEmpty(TrieNode *root)
 {
@@ -236,15 +242,15 @@ int printAutoSuggestions(TrieNode *root, const string query)
     }
 }
 
-void inserir_via_arquivo_txt()
+void inserir_via_arquivo_txt(TrieNode *root)
 {
-    struct TrieNode *root = getNode();
 
     FILE *file1;
     file1 = fopen("dados.txt", "r");
 
     char type;
     char palavra[200];
+
     if (file1 == NULL)
     {
         printf("Problemas na LEITURA do arquivo\n");
@@ -252,11 +258,10 @@ void inserir_via_arquivo_txt()
     else
     {
         printf("ARQUIVO ABERTO COM SUCESSO LEITURA SENDO FEITA ...\n");
-        while (!feof(file1))
+        while (fscanf(file1, "%[^\n]%*c", palavra) != EOF)
         {
-            fscanf(file1, "%[^\n]", palavra);
-            cout << "Palavra no arquivo: " << palavra << endl;
-            //insert(root, palavra);
+            cout << "Palavra no arquivo: " << palavra << "//" << endl;
+            insert(root, palavra);
         }
     }
     printf("LEITURA FEITA COM SUCESSO\n");
@@ -295,10 +300,11 @@ int main()
     //printAutoSuggestions(root, "neuro");
 
     int opcao;
+    struct TrieNode *root = getNode();
 
     while (2 == 2)
     {
-        struct TrieNode *root = getNode();
+
         printf("----------------------------------------------");
         printf("\n\tMENU\n");
         printf("1. Carregar arquivo de inicializacao:\n");
@@ -315,7 +321,7 @@ int main()
 
         case 1:
             ClearTerminal();
-            inserir_via_arquivo_txt();
+            inserir_via_arquivo_txt(root);
             printf("Opcao 1\n");
             break;
         case 2:
